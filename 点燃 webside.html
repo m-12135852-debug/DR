@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>????:????? | ?????? (Sibu)</title>
+    <title>新安少年：同一屋檐下 | 点燃青少年营 (Sibu)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;700&display=swap');
-        
         body {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
             scroll-behavior: smooth;
         }
 
         .font-kids {
-            font-family: 'ZCOOL KuaiLe', cursive;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+            font-weight: 900;
         }
 
         .hero-bg {
@@ -68,7 +67,7 @@
 </head>
 <body class="bg-blue-50 text-gray-800">
 
-    <!-- ??? -->
+    <!-- 导航栏 -->
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-sky-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -76,30 +75,30 @@
                     <div class="w-10 h-10 bg-sky-600 rounded-lg flex items-center justify-center text-white shadow-lg">
                         <i class="fas fa-fire"></i>
                     </div>
-                    <span class="text-2xl font-bold text-sky-600 tracking-tighter font-kids">????</span>
+                    <span class="text-2xl font-bold text-sky-600 tracking-tighter font-kids">点燃少年</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="#schedule" class="hover:text-sky-600 font-medium">?????</a>
-                    <a href="#highlights" class="hover:text-sky-600 font-medium">????</a>
-                    <a href="#contact" class="bg-sky-600 text-white px-6 py-2 rounded-full hover:bg-sky-700 transition-all shadow-md">????</a>
+                    <a href="#schedule" class="hover:text-sky-600 font-medium">完整行程表</a>
+                    <a href="#highlights" class="hover:text-sky-600 font-medium">活动亮点</a>
+                    <a href="#contact" class="bg-sky-600 text-white px-6 py-2 rounded-full hover:bg-sky-700 transition-all shadow-md">立即报名</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- ??? -->
+    <!-- 英雄区 -->
     <section id="home" class="hero-bg pt-32 pb-20 md:pt-48 md:pb-40 text-white">
         <div id="particles"></div>
         <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
             <div class="inline-block bg-yellow-400 text-sky-900 px-6 py-1 rounded-full text-sm font-bold mb-6 floating">
-                ?? ????? 2026 ????
+                🔥 诗巫新安堂 2026 年度盛事
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold mb-8 font-kids tracking-wider">
-                ????:?????
+                新安少年：同一屋檐下
             </h1>
             <p class="text-xl md:text-2xl mb-12 text-sky-50 max-w-2xl mx-auto leading-relaxed">
-                ???,??????????????,<br>
-                ??????????,?????????!
+                在这里，我们不只是在同一个屋檐下生活，<br>
+                更是要在同一个信仰里，点燃属于少年的光芒！
             </p>
             
             <div class="flex justify-center space-x-4 mb-12 text-center">
@@ -118,64 +117,64 @@
             </div>
 
             <a href="#schedule" class="bg-white text-sky-600 px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-xl inline-block">
-                ??????? <i class="fas fa-calendar-alt ml-2"></i>
+                查看全日程计划 <i class="fas fa-calendar-alt ml-2"></i>
             </a>
         </div>
     </section>
 
-    <!-- ?????? -->
+    <!-- 交互式日程表 -->
     <section id="schedule" class="py-20 bg-sky-100/50">
         <div class="max-w-4xl mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold font-kids mb-2 text-sky-900">?? � ????</h2>
-                <p class="text-sky-600">????????? (01/05 - 03/05)</p>
+                <h2 class="text-4xl font-bold font-kids mb-2 text-sky-900">点燃 · 行程总览</h2>
+                <p class="text-sky-600">根据官方行程表补全 (01/05 - 03/05)</p>
             </div>
 
             <!-- Tab Buttons -->
             <div class="flex justify-center space-x-2 md:space-x-4 mb-10 overflow-x-auto pb-2">
-                <button onclick="showDay(1)" id="btn-day1" class="tab-active whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md">??? (01/05)</button>
-                <button onclick="showDay(2)" id="btn-day2" class="bg-white text-sky-600 whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md hover:bg-sky-50">??? (02/05)</button>
-                <button onclick="showDay(3)" id="btn-day3" class="bg-white text-sky-600 whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md hover:bg-sky-50">??? (03/05)</button>
+                <button onclick="showDay(1)" id="btn-day1" class="tab-active whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md">第一天 (01/05)</button>
+                <button onclick="showDay(2)" id="btn-day2" class="bg-white text-sky-600 whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md hover:bg-sky-50">第二天 (02/05)</button>
+                <button onclick="showDay(3)" id="btn-day3" class="bg-white text-sky-600 whitespace-nowrap px-6 py-3 rounded-2xl font-bold transition-all shadow-md hover:bg-sky-50">第三天 (03/05)</button>
             </div>
 
             <!-- Day 1 Content -->
             <div id="day1" class="glass-card rounded-3xl shadow-2xl overflow-hidden">
                 <div class="bg-sky-600 text-white p-6 flex justify-between items-center">
                     <div>
-                        <h4 class="text-2xl font-bold">5?1? (?) - ???</h4>
-                        <p class="opacity-80 text-sm">???? � ????</p>
+                        <h4 class="text-2xl font-bold">5月1日 (五) - 旧圣堂</h4>
+                        <p class="opacity-80 text-sm">点燃起航 · 破冰之日</p>
                     </div>
                     <i class="fas fa-rocket text-4xl text-yellow-300 opacity-50"></i>
                 </div>
                 <div class="p-4 space-y-2">
-                    <!-- ?????? -->
+                    <!-- 特色活动置顶 -->
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">02:45pm - 04:45pm</span>
-                            <span class="text-xl font-bold text-gray-800">?? War Game (????)</span>
+                            <span class="text-xl font-bold text-gray-800">🔥 War Game (巅峰对战)</span>
                         </div>
                         <span class="bg-orange-500 text-white text-[10px] px-2 py-1 rounded">HOT!</span>
                     </div>
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">07:30pm - 09:00pm</span>
-                            <span class="text-xl font-bold text-gray-800">? ?? 1: ??</span>
+                            <span class="text-xl font-bold text-gray-800">✨ 主题 1: 点燃</span>
                         </div>
                     </div>
-                    <!-- ???? -->
+                    <!-- 常规活动 -->
                     <div class="grid grid-cols-1 gap-1 text-sm border-t mt-4 pt-4">
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:00am</span> <span>???? + ????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00am</span> <span>???? / ????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">09:30am</span> <span class="font-bold">????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">10:00pm</span> <span>??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">12:00pm</span> <span>????? (??)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">01:30pm</span> <span>????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-400">02:30pm</span> <span>???</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-gray-400 italic">04:45pm</span> <span>?? / ??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">05:45pm</span> <span>????? (??)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">07:00pm</span> <span>???? / ?? (07:20pm)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00pm</span> <span>?? / ????</span></div>
-                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">09:30pm</span> <span>?? + ?? ??</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:00am</span> <span>签到入营 + 领取物资</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00am</span> <span>大会报告 / 赞美时光</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">09:30am</span> <span class="font-bold">燃力破冰</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">10:00pm</span> <span>分组</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">12:00pm</span> <span>能量补给站 (午餐)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">01:30pm</span> <span>突破空间</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-400">02:30pm</span> <span>小点心</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-gray-400 italic">04:45pm</span> <span>休息 / 冲凉</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">05:45pm</span> <span>能量补给站 (晚餐)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">07:00pm</span> <span>赞美时光 / 开幕 (07:20pm)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00pm</span> <span>熄火 / 义工召集</span></div>
+                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">09:30pm</span> <span>洗刷 + 睡觉 😴</span></div>
                     </div>
                 </div>
             </div>
@@ -184,41 +183,41 @@
             <div id="day2" class="hidden glass-card rounded-3xl shadow-2xl overflow-hidden">
                 <div class="bg-sky-700 text-white p-6 flex justify-between items-center">
                     <div>
-                        <h4 class="text-2xl font-bold">5?2? (?) - ???</h4>
-                        <p class="opacity-80 text-sm">???? � ????</p>
+                        <h4 class="text-2xl font-bold">5月2日 (六) - 旧圣堂</h4>
+                        <p class="opacity-80 text-sm">火焰成长 · 深入探索</p>
                     </div>
                     <i class="fas fa-lightbulb text-4xl text-yellow-300 opacity-50"></i>
                 </div>
                 <div class="p-4 space-y-2">
-                    <!-- ?????? -->
+                    <!-- 特色活动置顶 -->
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">02:00pm - 03:15pm</span>
-                            <span class="text-xl font-bold text-gray-800">?? ????? Ask Me Boxxxx</span>
+                            <span class="text-xl font-bold text-gray-800">💬 提问小盒子 Ask Me Boxxxx</span>
                         </div>
                         <span class="bg-blue-500 text-white text-[10px] px-2 py-1 rounded">DEEP!</span>
                     </div>
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">07:00pm - 09:00pm</span>
-                            <span class="text-xl font-bold text-gray-800">?? ? Ni ?? (????)</span>
+                            <span class="text-xl font-bold text-gray-800">🎵 音 Ni 而在 (敬拜之夜)</span>
                         </div>
                     </div>
-                    <!-- ?? -->
+                    <!-- 常规 -->
                     <div class="grid grid-cols-1 gap-1 text-sm border-t mt-4 pt-4">
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">06:00am</span> <span>?? + ??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">07:00am</span> <span>??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:15am</span> <span>???? / ????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-600">08:50am</span> <span class="font-bold">?? 2: ??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">10:15am</span> <span>????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">12:00pm</span> <span>????? (??)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">01:30pm</span> <span>????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">03:15pm</span> <span>???????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-400">03:45pm</span> <span>??? + ?? (04:00pm)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">04:30pm</span> <span>?? / ??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">05:45pm</span> <span>????? (??)</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00pm</span> <span>?? / ????</span></div>
-                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">09:30pm</span> <span>?? + ?? ??</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">06:00am</span> <span>起床 + 灵修</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">07:00am</span> <span>早餐</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:15am</span> <span>大会报告 / 赞美时光</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-600">08:50am</span> <span class="font-bold">主题 2: 点燃</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">10:15am</span> <span>突破空间</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">12:00pm</span> <span>能量补给站 (午餐)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-sky-600">01:30pm</span> <span>赞美时光</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">03:15pm</span> <span>练习崇拜大合唱</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-orange-400">03:45pm</span> <span>小点心 + 排练 (04:00pm)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">04:30pm</span> <span>休息 / 冲凉</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold text-green-600">05:45pm</span> <span>能量补给站 (晚餐)</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:00pm</span> <span>熄火 / 义工召集</span></div>
+                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">09:30pm</span> <span>洗刷 + 睡觉 😴</span></div>
                     </div>
                 </div>
             </div>
@@ -227,59 +226,59 @@
             <div id="day3" class="hidden glass-card rounded-3xl shadow-2xl overflow-hidden">
                 <div class="bg-sky-800 text-white p-6 flex justify-between items-center">
                     <div>
-                        <h4 class="text-2xl font-bold">5?3? (?) - ??/??</h4>
-                        <p class="opacity-80 text-sm">???? � ????</p>
+                        <h4 class="text-2xl font-bold">5月3日 (日) - 新副/圣堂</h4>
+                        <p class="opacity-80 text-sm">荣耀绽放 · 回家之路</p>
                     </div>
                     <i class="fas fa-star text-4xl text-yellow-300 opacity-50"></i>
                 </div>
                 <div class="p-4 space-y-2">
-                    <!-- ?????? -->
+                    <!-- 特色活动置顶 -->
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">09:30am - 11:00am</span>
-                            <span class="text-xl font-bold text-gray-800">?? ???? (???)</span>
+                            <span class="text-xl font-bold text-gray-800">💒 荣耀崇拜 (新圣堂)</span>
                         </div>
                         <span class="bg-yellow-500 text-white text-[10px] px-2 py-1 rounded">GLORY!</span>
                     </div>
                     <div class="p-4 special-activity rounded-xl flex justify-between items-center shadow-sm">
                         <div>
                             <span class="font-bold text-orange-600 block">11:00am</span>
-                            <span class="text-xl font-bold text-gray-800">?? ?????? / ??</span>
+                            <span class="text-xl font-bold text-gray-800">🎁 揭晓最后惊喜 / 闭幕</span>
                         </div>
                     </div>
-                    <!-- ?? -->
+                    <!-- 常规 -->
                     <div class="grid grid-cols-1 gap-1 text-sm border-t mt-4 pt-4">
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">06:30am</span> <span>?? + ??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">07:30am</span> <span>??</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:45am</span> <span>????</span></div>
-                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:15am</span> <span>????</span></div>
-                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">12:00pm</span> <span class="font-bold text-sky-800">??? ??</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">06:30am</span> <span>起床 + 收拾</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">07:30am</span> <span>早餐</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">08:45am</span> <span>练习诗班</span></div>
+                        <div class="flex p-2 border-b border-gray-100"><span class="w-20 font-bold">09:15am</span> <span>预备崇拜</span></div>
+                        <div class="flex p-2 bg-gray-50"><span class="w-20 font-bold">12:00pm</span> <span class="font-bold text-sky-800">回家咯 🚗</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ???? + ???? -->
+    <!-- 报名表单 + 名额计数 -->
     <section id="contact" class="py-20 bg-gray-900 text-white overflow-hidden relative">
         <div class="max-w-3xl mx-auto px-4 relative z-10">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold font-kids mb-4">????????</h2>
+                <h2 class="text-4xl font-bold font-kids mb-4">加入这趟青春旅程</h2>
                 
                 <div class="mt-8 mb-4 max-w-md mx-auto bg-gray-800 p-6 rounded-3xl border border-white/10">
                     <div class="flex justify-between items-end mb-2">
-                        <span class="text-sky-400 font-bold">??????</span>
-                        <span class="text-xs text-gray-400">?? <span class="text-white text-base font-bold">50</span> ???</span>
+                        <span class="text-sky-400 font-bold">当前报名进度</span>
+                        <span class="text-xs text-gray-400">仅限 <span class="text-white text-base font-bold">50</span> 位少年</span>
                     </div>
                     <div class="w-full bg-gray-700 h-4 rounded-full overflow-hidden mb-2">
                         <div id="progressBar" class="h-full bg-gradient-to-r from-sky-500 to-yellow-400 transition-all duration-[2000ms]" style="width: 0%"></div>
                     </div>
                     <p class="text-sm text-gray-400">
-                        ???? <span id="currentCount" class="text-yellow-400 font-bold">--</span> ???,?? <span id="remainCount" class="text-white font-bold">--</span> ???
+                        目前已有 <span id="currentCount" class="text-yellow-400 font-bold">--</span> 人报名，剩余 <span id="remainCount" class="text-white font-bold">--</span> 个席位
                     </p>
                     <div class="mt-4 py-1 px-3 bg-red-500/20 rounded-full inline-block">
                         <p class="text-xs text-red-400 animate-pulse font-bold">
-                            <i class="fas fa-exclamation-circle mr-1"></i> ????????!
+                            <i class="fas fa-exclamation-circle mr-1"></i> 别让你的位置留空！
                         </p>
                     </div>
                 </div>
@@ -287,26 +286,26 @@
 
             <form id="enrollForm" class="bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-sm space-y-6">
                 <div class="grid md:grid-cols-2 gap-6">
-                    <input type="text" required placeholder="????" class="w-full px-5 py-4 rounded-2xl bg-gray-800 border-none focus:ring-2 focus:ring-sky-500 text-white">
-                    <input type="tel" required placeholder="??/?????" class="w-full px-5 py-4 rounded-2xl bg-gray-800 border-none focus:ring-2 focus:ring-sky-500 text-white">
+                    <input type="text" required placeholder="少年姓名" class="w-full px-5 py-4 rounded-2xl bg-gray-800 border-none focus:ring-2 focus:ring-sky-500 text-white">
+                    <input type="tel" required placeholder="家长/监护人电话" class="w-full px-5 py-4 rounded-2xl bg-gray-800 border-none focus:ring-2 focus:ring-sky-500 text-white">
                 </div>
                 <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-sky-900 font-extrabold py-5 rounded-2xl transition shadow-lg text-xl font-kids">
-                    ?? ??????
+                    🔥 抢先锁定名额
                 </button>
             </form>
             
             <div id="successMessage" class="hidden mt-8 p-6 bg-sky-600 text-white rounded-3xl text-center animate-bounce shadow-2xl">
-                <h4 class="text-2xl font-bold mb-2">????!</h4>
-                <p>??????????????????????!</p>
+                <h4 class="text-2xl font-bold mb-2">提交成功！</h4>
+                <p>我们将尽快联系您的家长。准备好点燃你的青春吧！</p>
             </div>
         </div>
     </section>
 
-    <!-- ?? -->
+    <!-- 页脚 -->
     <footer class="py-12 bg-black text-center text-gray-500 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4">
-            <p class="font-kids text-white text-xl mb-4 tracking-widest">???? � ?????</p>
-            <p class="text-xs">Methodist Sing Ang Tong (Sibu) � Youth Ministry</p>
+            <p class="font-kids text-white text-xl mb-4 tracking-widest">新安少年 · 同一屋檐下</p>
+            <p class="text-xs">Methodist Sing Ang Tong (Sibu) · Youth Ministry</p>
             <div class="flex justify-center space-x-6 mt-6">
                 <a href="#" class="hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
                 <a href="#" class="hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
@@ -315,7 +314,7 @@
     </footer>
 
     <script>
-        // 1. ????
+        // 1. 粒子背景
         function createParticles() {
             const container = document.getElementById('particles');
             for(let i=0; i<30; i++) {
@@ -330,7 +329,7 @@
         }
         createParticles();
 
-        // 2. ??????
+        // 2. 名额进度模拟
         function animateProgress() {
             const total = 50;
             const current = 42; 
@@ -343,7 +342,7 @@
         }
         animateProgress();
 
-        // 3. ???
+        // 3. 倒计时
         function updateCountdown() {
             const eventDate = new Date("May 1, 2026 08:00:00").getTime();
             const now = new Date().getTime();
@@ -358,7 +357,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // 4. Tab ??
+        // 4. Tab 切换
         function showDay(dayNum) {
             const days = ['day1', 'day2', 'day3'];
             const btns = ['btn-day1', 'btn-day2', 'btn-day3'];
@@ -377,7 +376,7 @@
             });
         }
 
-        // 5. ????
+        // 5. 表单提交
         document.getElementById('enrollForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const form = e.target;
