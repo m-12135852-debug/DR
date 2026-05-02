@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Chess: Robot Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        :root {
+            --light-square: #f1f5f9;
+            --dark-square: #cbd5e1;
+            --highlight: rgba(99, 102, 241, 0.4);
+            --last-move: rgba(99, 102, 241, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            width: 100%;
+            max-width: 560px;
+            aspect-ratio: 1 / 1;
+            border: 12px solid #334155;
+            border-radius: 8px;
+            user-select: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .square.light { background-color: var(--light-square); }
+        .square.dark { background-color: var(--dark-square); }
+
+        .square.selected { background-color: var(--highlight) !important; box-shadow: inset 0 0 15px rgba(99, 102, 241, 0.5); }
+        .square.last-move { background-color: var(--last-move) !important; }
+
+        .piece {
+            width: 85%;
+            height: 85%;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        .dot {
+            width: 20%;
+            height: 20%;
+            background-color: rgba(99, 102, 241, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .capture-ring {
+            width: 85%;
+            height: 85%;
+            border: 4px solid rgba(99, 102, 241, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .timer-active {
+            background-color: #6366f1 !important;
+            color: #fff !important;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            border-color: #818cf8 !important;
+        }
+
+        .active-mode {
+            background-color: #6366f1 !important;
+            color: white !important;
+        }
+
+        @media (max-width: 600px) {
+            .chess-board { max-width: 95vw; border-width: 6px; }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col items-center p-4">
+
+    <div class="mb-4 text-center w-full max-w-md">
+        <h1 class="text-3xl font-black mb-1 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400 italic tracking-tighter">ROBOT CHALLENGE</h1>
+        
+        <!-- Timers -->
+        <div class="flex justify-between items-center mb-4 gap-4">
+            <div id="timer-b" class="bg-slate-900/50 backdrop-blur-md flex-1 py-3 rounded-2xl text-xl font-black border-2 border-slate-800 transition-all flex flex-col items-center">
+                <span class="text-[10px] uppercase opacity-50 mb-1" id="black-label">Robot</span>
+                <span id="clock-b">05:00</span>
+            </div>
+            <div id="timer-w" class="bg-slate-900/50 backdrop-blur-md flex-1 py-3 rounded-2xl text-xl font-black border-2 border-slate-800 transition-all timer-active flex flex-col items-center">
+                <span class="text-[10px] uppercase opacity-50 mb-1">Human</span>
+                <span id="clock-w">05:00</span>
+            </div>
+        </div>
+
+        <!-- Mode Selectors -->
+        <div class="flex flex-wrap gap-2 justify-center mb-4 bg-slate-900/40 p-2 rounded-2xl border border-slate-800/50">
+            <button onclick="setOpponent('pvp')" id="mode-pvp" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 transition">PVP</button>
+            <div class="w-[1px] h-6 bg-slate-700 mx-1"></div>
+            <button onclick="setOpponent('ai', 'easy')" id="mode-easy" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 transition active-mode">Easy Bot</button>
+            <button onclick="setOpponent('ai', 'hard')" id="mode-hard" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 transition">Hard Bot</button>
+            <button onclick="setOpponent('ai', 'impossible')" id="mode-impossible" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 transition text-red-400">Impossible</button>
+        </div>
+    </div>
+
+    <div id="board" class="chess-board"></div>
+
+    <div class="mt-6 flex flex-col items-center gap-4 w-full max-w-md">
+        <div class="flex gap-4">
+            <button id="reset-btn" class="bg-indigo-600 text-white hover:bg-indigo-500 px-8 py-2.5 rounded-xl font-black transition-all active:scale-95 shadow-xl text-sm">RESTART MATCH</button>
+        </div>
+
+        <div id="captured-area" class="flex flex-col gap-2 w-full">
+            <div id="black-captured" class="flex flex-wrap gap-1 min-h-[30px] justify-center opacity-40"></div>
+            <div id="white-captured" class="flex flex-wrap gap-1 min-h-[30px] justify-center opacity-40"></div>
+        </div>
+    </div>
+
+    <!-- Modal for Game Over -->
+    <div id="game-over-modal" class="fixed inset-0 bg-slate-950/95 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-slate-900 p-8 rounded-3xl border border-slate-700 text-center max-w-xs w-full shadow-2xl">
+            <h2 class="text-2xl font-black mb-1 text-white" id="game-over-title">Game Over</h2>
+            <p id="winner-text" class="text-slate-400 mb-6 font-medium uppercase tracking-widest text-[10px]"></p>
+            <button onclick="gameInstance.resetGame()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-black text-white transition-all">NEW MATCH</button>
+        </div>
+    </div>
+
+    <script>
+        const PIECES_SVG = {
+            wP: `<svg viewBox="0 0 45 45"><defs><radialGradient id="gwP" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#cbd5e1"/></radialGradient></defs><circle cx="22.5" cy="13" r="6" fill="url(#gwP)" stroke="#94a3b8" stroke-width="1"/><path d="M15 38c0-8 4-12 7.5-12s7.5 4 7.5 12" fill="url(#gwP)" stroke="#94a3b8" stroke-width="1"/><path d="M11 38h23v3H11z" fill="#94a3b8"/></svg>`,
+            wR: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gwR" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient></defs><path d="M12 38V12h4v3h4v-3h5v3h4v-3h4v26H12z" fill="url(#gwR)" stroke="#64748b" stroke-width="1"/><path d="M10 38h25v3H10z" fill="#64748b"/></svg>`,
+            wN: `<svg viewBox="0 0 45 45"><defs><radialGradient id="gwN" cx="40%" cy="30%" r="80%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#94a3b8"/></radialGradient></defs><path d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21" fill="url(#gwN)" stroke="#64748b" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
+            wB: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gwB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#cbd5e1"/></linearGradient></defs><path d="M22.5 8s-6 6-6 12c0 6 2 8 6 8s6-2 6-8c0-6-6-12-6-12z" fill="url(#gwB)" stroke="#94a3b8" stroke-width="1.2"/><path d="M12 38c2-4 4-6 10.5-6s8.5 2 10.5 6" fill="url(#gwB)" stroke="#94a3b8" stroke-width="1"/><path d="M11 38h23v3H11z" fill="#94a3b8"/></svg>`,
+            wQ: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gwQ" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient></defs><path d="M9 22c4-8 8-15 13.5-15s9.5 7 13.5 15c-3 8-7 16-13.5 16s-10.5-8-13.5-16z" fill="url(#gwQ)" stroke="#64748b" stroke-width="1"/><circle cx="22.5" cy="7" r="3" fill="#fff" stroke="#64748b"/><path d="M10 38h25v3H10z" fill="#64748b"/></svg>`,
+            wK: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gwK" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#64748b"/></linearGradient></defs><path d="M22.5 5v5M20 7.5h5" stroke="#64748b" stroke-width="3" stroke-linecap="round"/><path d="M15 38c0-10 2-15 7.5-15s7.5 5 7.5 15" fill="url(#gwK)" stroke="#64748b" stroke-width="1.5"/><path d="M10 38h25v3H10z" fill="#475569"/></svg>`,
+            bP: `<svg viewBox="0 0 45 45"><defs><radialGradient id="gbP" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#0f172a"/></radialGradient></defs><circle cx="22.5" cy="13" r="6" fill="url(#gbP)" stroke="#1e293b" stroke-width="1"/><path d="M15 38c0-8 4-12 7.5-12s7.5 4 7.5 12" fill="url(#gbP)" stroke="#1e293b" stroke-width="1"/><path d="M11 38h23v3H11z" fill="#0f172a"/></svg>`,
+            bR: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gbR" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#020617"/></linearGradient></defs><path d="M12 38V12h4v3h4v-3h5v3h4v-3h4v26H12z" fill="url(#gbR)" stroke="#0f172a" stroke-width="1"/><path d="M10 38h25v3H10z" fill="#020617"/></svg>`,
+            bN: `<svg viewBox="0 0 45 45"><defs><radialGradient id="gbN" cx="40%" cy="30%" r="80%"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#020617"/></radialGradient></defs><path d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21" fill="url(#gbN)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
+            bB: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gbB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs><path d="M22.5 8s-6 6-6 12c0 6 2 8 6 8s6-2 6-8c0-6-6-12-6-12z" fill="url(#gbB)" stroke="#1e293b" stroke-width="1.2"/><path d="M12 38c2-4 4-6 10.5-6s8.5 2 10.5 6" fill="url(#gbB)" stroke="#1e293b" stroke-width="1"/><path d="M11 38h23v3H11z" fill="#020617"/></svg>`,
+            bQ: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gbQ" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#020617"/></linearGradient></defs><path d="M9 22c4-8 8-15 13.5-15s9.5 7 13.5 15c-3 8-7 16-13.5 16s-10.5-8-13.5-16z" fill="url(#gbQ)" stroke="#1e293b" stroke-width="1"/><circle cx="22.5" cy="7" r="3" fill="#334155" stroke="#1e293b"/><path d="M10 38h25v3H10z" fill="#020617"/></svg>`,
+            bK: `<svg viewBox="0 0 45 45"><defs><linearGradient id="gbK" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#020617"/></linearGradient></defs><path d="M22.5 5v5M20 7.5h5" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/><path d="M15 38c0-10 2-15 7.5-15s7.5 5 7.5 15" fill="url(#gbK)" stroke="#1e293b" stroke-width="1.5"/><path d="M10 38h25v3H10z" fill="#020617"/></svg>`
+        };
+
+        const INITIAL_BOARD = [
+            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+            [null, null, null, null, null, null, null, null],
+            [null, null, null, null, null, null, null, null],
+            [null, null, null, null, null, null, null, null],
+            [null, null, null, null, null, null, null, null],
+            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+        ];
+
+        let gameInstance;
+
+        function setOpponent(type, difficulty = 'easy') {
+            if (!gameInstance) return;
+            gameInstance.opponent = type;
+            gameInstance.difficulty = difficulty;
+            
+            // UI Updates
+            document.querySelectorAll('[id^="mode-"]').forEach(el => el.classList.remove('active-mode'));
+            document.getElementById(`mode-${type === 'pvp' ? 'pvp' : difficulty}`).classList.add('active-mode');
+            document.getElementById('black-label').innerText = type === 'pvp' ? 'Player 2' : `${difficulty} Robot`;
+            
+            if (type === 'ai' && gameInstance.turn === 'b' && !gameInstance.gameOver) {
+                gameInstance.makeAIMove();
+            }
+        }
+
+        class ChessGame {
+            constructor() {
+                this.board = JSON.parse(JSON.stringify(INITIAL_BOARD));
+                this.turn = 'w';
+                this.selected = null;
+                this.validMoves = [];
+                this.lastMove = null;
+                this.captured = { w: [], b: [] };
+                this.gameOver = false;
+                this.opponent = 'ai';
+                this.difficulty = 'easy';
+                this.timeLeft = { w: 300, b: 300 };
+                this.timerInterval = null;
+
+                this.pieceValues = { P: 10, N: 30, B: 30, R: 50, Q: 90, K: 900 };
+
+                this.initUI();
+                this.startTimer();
+            }
+
+            initUI() {
+                const boardEl = document.getElementById('board');
+                boardEl.innerHTML = '';
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        const square = document.createElement('div');
+                        square.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+                        square.dataset.r = r;
+                        square.dataset.c = c;
+                        square.addEventListener('click', () => this.handleSquareClick(r, c));
+                        boardEl.appendChild(square);
+                    }
+                }
+                document.getElementById('reset-btn').addEventListener('click', () => this.resetGame());
+                this.updateUI();
+            }
+
+            resetGame() {
+                this.board = JSON.parse(JSON.stringify(INITIAL_BOARD));
+                this.turn = 'w';
+                this.selected = null;
+                this.validMoves = [];
+                this.lastMove = null;
+                this.captured = { w: [], b: [] };
+                this.gameOver = false;
+                this.timeLeft = { w: 300, b: 300 };
+                document.getElementById('game-over-modal').classList.add('hidden');
+                this.startTimer();
+                this.updateUI();
+            }
+
+            startTimer() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                this.timerInterval = setInterval(() => {
+                    if (this.gameOver) return;
+                    this.timeLeft[this.turn]--;
+                    if (this.timeLeft[this.turn] <= 0) this.endGame(this.turn === 'w' ? 'Black' : 'White', "Time Out");
+                    this.updateTimerDisplay();
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                const format = (s) => `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
+                document.getElementById('clock-w').innerText = format(this.timeLeft.w);
+                document.getElementById('clock-b').innerText = format(this.timeLeft.b);
+                document.getElementById('timer-w').classList.toggle('timer-active', this.turn === 'w');
+                document.getElementById('timer-b').classList.toggle('timer-active', this.turn === 'b');
+            }
+
+            endGame(winner, reason) {
+                this.gameOver = true;
+                clearInterval(this.timerInterval);
+                document.getElementById('winner-text').innerText = `${winner} won by ${reason}`;
+                document.getElementById('game-over-modal').classList.remove('hidden');
+            }
+
+            handleSquareClick(r, c) {
+                if (this.gameOver) return;
+                // Don't allow clicking if AI is thinking
+                if (this.opponent === 'ai' && this.turn === 'b') return;
+
+                const piece = this.board[r][c];
+                if (piece && piece[0] === this.turn) {
+                    this.selected = { r, c };
+                    this.validMoves = this.calculateValidMoves(r, c);
+                } else if (this.selected && this.validMoves.some(m => m.r === r && m.c === c)) {
+                    this.executeMove(this.selected.r, this.selected.c, r, c);
+                    this.selected = null;
+                    this.validMoves = [];
+                    
+                    if (this.opponent === 'ai' && !this.gameOver) {
+                        setTimeout(() => this.makeAIMove(), 500);
+                    }
+                } else {
+                    this.selected = null;
+                    this.validMoves = [];
+                }
+                this.updateUI();
+            }
+
+            makeAIMove() {
+                if (this.gameOver) return;
+                
+                const allMoves = [];
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        const p = this.board[r][c];
+                        if (p && p[0] === 'b') {
+                            const moves = this.calculateValidMoves(r, c);
+                            moves.forEach(m => allMoves.push({ from: { r, c }, to: m }));
+                        }
+                    }
+                }
+
+                if (allMoves.length === 0) return;
+
+                let selectedMove;
+                
+                if (this.difficulty === 'easy') {
+                    // Mostly random, slight preference for captures
+                    const captures = allMoves.filter(m => this.board[m.to.r][m.to.c]);
+                    selectedMove = (captures.length > 0 && Math.random() > 0.5) 
+                        ? captures[Math.floor(Math.random() * captures.length)]
+                        : allMoves[Math.floor(Math.random() * allMoves.length)];
+                } else {
+                    // Hard and Impossible use scoring
+                    const depth = this.difficulty === 'impossible' ? 3 : 1;
+                    selectedMove = this.getBestMove(allMoves, depth);
+                }
+
+                this.executeMove(selectedMove.from.r, selectedMove.from.c, selectedMove.to.r, selectedMove.to.c);
+                this.updateUI();
+            }
+
+            getBestMove(moves, depth) {
+                let bestScore = -Infinity;
+                let bestMoves = [];
+
+                moves.forEach(m => {
+                    const score = this.evaluateMove(m);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMoves = [m];
+                    } else if (score === bestScore) {
+                        bestMoves.push(m);
+                    }
+                });
+
+                return bestMoves[Math.floor(Math.random() * bestMoves.length)];
+            }
+
+            evaluateMove(move) {
+                let score = 0;
+                const target = this.board[move.to.r][move.to.c];
+                
+                // Capture value
+                if (target) {
+                    score += this.pieceValues[target[1]] * 10;
+                }
+
+                // Simple positional bonus (center control)
+                const distFromCenter = Math.abs(3.5 - move.to.r) + Math.abs(3.5 - move.to.c);
+                score += (7 - distFromCenter);
+
+                return score;
+            }
+
+            executeMove(fromR, fromC, toR, toC) {
+                const piece = this.board[fromR][fromC];
+                const target = this.board[toR][toC];
+                if (target) {
+                    if (target[1] === 'K') this.endGame(this.turn === 'w' ? 'White' : 'Black', "Checkmate");
+                    this.captured[target[0]].push(target);
+                }
+                this.board[toR][toC] = piece;
+                this.board[fromR][fromC] = null;
+                this.lastMove = { from: { r: fromR, c: fromC }, to: { r: toR, c: toC } };
+                this.turn = this.turn === 'w' ? 'b' : 'w';
+                this.updateTimerDisplay();
+            }
+
+            calculateValidMoves(r, c) {
+                const piece = this.board[r][c];
+                const type = piece[1];
+                const color = piece[0];
+                const moves = [];
+                const addIfValid = (nr, nc) => {
+                    if (nr < 0 || nr > 7 || nc < 0 || nc > 7) return false;
+                    const target = this.board[nr][nc];
+                    if (!target) { moves.push({ r: nr, c: nc }); return true; }
+                    else if (target[0] !== color) { moves.push({ r: nr, c: nc }); return false; }
+                    return false;
+                };
+                const slide = (dr, dc) => {
+                    let nr = r + dr, nc = c + dc;
+                    while (nr >= 0 && nr <= 7 && nc >= 0 && nc <= 7) {
+                        const target = this.board[nr][nc];
+                        if (!target) moves.push({ r: nr, c: nc });
+                        else { if (target[0] !== color) moves.push({ r: nr, c: nc }); break; }
+                        nr += dr; nc += dc;
+                    }
+                };
+
+                switch (type) {
+                    case 'P':
+                        const dir = color === 'w' ? -1 : 1;
+                        if (!this.board[r + dir]?.[c]) {
+                            moves.push({ r: r + dir, c: c });
+                            if (((color === 'w' && r === 6) || (color === 'b' && r === 1)) && !this.board[r + 2 * dir]?.[c]) moves.push({ r: r + 2 * dir, c: c });
+                        }
+                        [-1, 1].forEach(dc => {
+                            const target = this.board[r + dir]?.[c + dc];
+                            if (target && target[0] !== color) moves.push({ r: r + dir, c: c + dc });
+                        });
+                        break;
+                    case 'R': [[0,1],[0,-1],[1,0],[-1,0]].forEach(d => slide(d[0], d[1])); break;
+                    case 'N': [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(d => addIfValid(r+d[0], c+d[1])); break;
+                    case 'B': [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d => slide(d[0], d[1])); break;
+                    case 'Q': [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d => slide(d[0], d[1])); break;
+                    case 'K': [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d => addIfValid(r+d[0], c+d[1])); break;
+                }
+                return moves;
+            }
+
+            updateUI() {
+                const boardEl = document.getElementById('board');
+                const squares = boardEl.children;
+                for (let i = 0; i < 64; i++) {
+                    const r = Math.floor(i / 8);
+                    const c = i % 8;
+                    const square = squares[i];
+                    const piece = this.board[r][c];
+                    square.innerHTML = '';
+                    square.classList.remove('selected', 'last-move');
+                    if (this.selected && this.selected.r === r && this.selected.c === c) square.classList.add('selected');
+                    if (this.lastMove && ((this.lastMove.from.r === r && this.lastMove.from.c === c) || (this.lastMove.to.r === r && this.lastMove.to.c === c))) square.classList.add('last-move');
+                    if (piece) {
+                        const pieceEl = document.createElement('div');
+                        pieceEl.className = 'piece';
+                        pieceEl.innerHTML = PIECES_SVG[piece];
+                        square.appendChild(pieceEl);
+                    }
+                    if (this.validMoves.find(m => m.r === r && m.c === c)) {
+                        const marker = document.createElement('div');
+                        marker.className = piece ? 'capture-ring' : 'dot';
+                        square.appendChild(marker);
+                    }
+                }
+                const updateCaptured = (color) => {
+                    const el = document.getElementById(`${color === 'w' ? 'white' : 'black'}-captured`);
+                    el.innerHTML = this.captured[color].map(p => `<div class="w-5 h-5">${PIECES_SVG[p]}</div>`).join('');
+                };
+                updateCaptured('w'); updateCaptured('b');
+            }
+        }
+
+        window.onload = () => gameInstance = new ChessGame();
+    </script>
+</body>
+</html>
